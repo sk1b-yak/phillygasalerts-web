@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-100 dark:bg-slate-800;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-600 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400 dark:bg-slate-500;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-philly-blue text-white px-4 py-2 rounded-lg font-medium 
+           hover:bg-blue-700 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-philly-blue focus:ring-offset-2
+           dark:focus:ring-offset-slate-900;
+  }
+  
+  .btn-secondary {
+    @apply border-2 border-philly-blue text-philly-blue px-4 py-2 rounded-lg font-medium
+           hover:bg-philly-blue hover:text-white transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-philly-blue focus:ring-offset-2
+           dark:focus:ring-offset-slate-900;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-xl shadow-lg 
+           border border-slate-200 dark:border-slate-700;
+  }
+  
+  .input {
+    @apply w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600
+           bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100
+           focus:outline-none focus:ring-2 focus:ring-philly-blue focus:border-transparent
+           placeholder-slate-400 dark:placeholder-slate-500;
+  }
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  @apply font-sans;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply rounded-xl shadow-xl;
+}
+
+.leaflet-popup-content {
+  @apply m-0 p-0;
+}
+
+/* Price marker styles */
+.price-marker {
+  @apply flex items-center justify-center rounded-full border-2 border-white
+         font-bold text-white shadow-lg transition-transform duration-200;
+}
+
+.price-marker:hover {
+  @apply scale-110;
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Skeleton loading */
+.skeleton {
+  @apply animate-pulse bg-slate-200 dark:bg-slate-700 rounded;
+}
