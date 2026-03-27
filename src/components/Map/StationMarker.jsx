@@ -4,6 +4,7 @@ import L from 'leaflet'
 import { getPriceColor } from '../../utils/colors'
 import { formatPrice } from '../../utils/formatters'
 import { StationPopup } from './StationPopup'
+import { useStore } from '../../stores/useStore'
 
 // Fix for default marker icon issue in Leaflet with webpack/vite
 delete L.Icon.Default.prototype._getIconUrl
@@ -16,7 +17,7 @@ L.Icon.Default.mergeOptions({
 export function StationMarker({ station, minPrice, maxPrice }) {
   const [position, setPosition] = useState([null, null])
   const [isLoading, setIsLoading] = useState(true)
-  const { setSelectedStation, selectedStation } = require('../../stores/useStore').useStore()
+  const { setSelectedStation, selectedStation } = useStore()
   
   // Geocode address if lat/lng not available
   useEffect(() => {
