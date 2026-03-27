@@ -1,35 +1,80 @@
-import { Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
+import { useEffect, useRef } from 'react'
+import { createRoot } from 'react-dom/client'
+import maplibregl from 'maplibre-gl'
 import { getPriceColor } from '../../utils/colors'
 import { formatPrice } from '../../utils/formatters'
 import { StationPopup } from './StationPopup'
 import { useStore } from '../../stores/useStore'
 
-// Fix for default marker icon issue in Leaflet with webpack/vite
-delete L.Icon.Default.prototype._getIconUrl
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-})
-
-export function StationMarker({ station, minPrice, maxPrice }) {
+export function StationMarker({ map, station, minPrice, maxPrice }) {
+  const markerRef = useRef(null)
+  const popupRef = useRef(null)
+  const rootRef = useRef(null)
   const { setSelectedStation, selectedStation } = useStore()
+  
   const hasReliableLocation = station.has_reliable_location && station.lat != null && station.lng != null
 
-  if (!hasReliableLocation) {
-    return null
-  }
+  useEffect(() => {
+    if (!hasReliableLocation || !map) return
 
-  const position = [station.lat, station.lng]
-  
-  const color = getPriceColor(station.price_regular, minPrice, maxPrice)
-  const isSelected = selectedStation?.station_name === station.station_name
-  
-  // Create custom icon
-  const icon = L.divIcon({
-    className: 'custom-marker',
-    html: `
+    // Create marker DOM element
+    const el = document.createElement('div')
+    el.className = 'custom-marker'
+    
+    // Create popup DOM element
+    const popupNode = document.createElement('div')
+    rootRef.current = createRoot(popupNode)
+    rootRef.current.render(<StationPopup station={station} />)
+    
+    // Initialize popup
+    popupRef.current = new maplibregl.Popup({
+      offset: 25,
+      closeButton: true,
+      closeOnClick: false,
+      maxWidth: '300px'
+    }).setDOMContent(popupNode)
+    
+    // Initialize marker
+    markerRef.current = new maplibregl.Marker({
+      element: el,
+      anchor: 'bottom'
+    })
+      .setLngLat([station.lng, station.lat])
+      .setPopup(popupRef.current)
+      .addTo(map)
+      
+    // Add click event listener to the marker element
+    el.addEventListener('click', () => {
+      setSelectedStation(station)
+    })
+    
+    // Add close event listener to popup
+    popupRef.current.on('close', () => {
+      // Only clear if this is the currently selected station
+      if (useStore.getState().selectedStation?.station_name === station.station_name) {
+        setSelectedStation(null)
+      }
+    })
+
+    return () => {
+      if (rootRef.current) {
+        rootRef.current.unmount()
+      }
+      if (markerRef.current) {
+        markerRef.current.remove()
+      }
+    }
+  }, [map, station.lng, station.lat, hasReliableLocation]) // Re-create if location changes
+
+  // Update marker appearance when selection or price changes
+  useEffect(() => {
+    if (!markerRef.current) return
+    
+    const el = markerRef.current.getElement()
+    const color = getPriceColor(station.price_regular, minPrice, maxPrice)
+    const isSelected = selectedStation?.station_name === station.station_name
+    
+    el.innerHTML = `
       <div style="
         width: ${isSelected ? '40px' : '32px'};
         height: ${isSelected ? '40px' : '32px'};
@@ -48,23 +93,16 @@ export function StationMarker({ station, minPrice, maxPrice }) {
       ">
         ${formatPrice(station.price_regular).replace('$', '')}
       </div>
-    `,
-    iconSize: [isSelected ? 40 : 32, isSelected ? 40 : 32],
-    iconAnchor: [isSelected ? 20 : 16, isSelected ? 20 : 16],
-    popupAnchor: [0, -20],
-  })
-  
-  return (
-    <Marker
-      position={position}
-      icon={icon}
-      eventHandlers={{
-        click: () => setSelectedStation(station),
-      }}
-    >
-      <Popup>
-        <StationPopup station={station} />
-      </Popup>
-    </Marker>
-  )
+    `
+    
+    // Handle popup visibility based on selection
+    if (isSelected && !popupRef.current.isOpen()) {
+      markerRef.current.togglePopup()
+    } else if (!isSelected && popupRef.current.isOpen()) {
+      markerRef.current.togglePopup()
+    }
+    
+  }, [selectedStation, station.price_regular, minPrice, maxPrice])
+
+  return null
 }
