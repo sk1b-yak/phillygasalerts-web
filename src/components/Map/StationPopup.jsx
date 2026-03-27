@@ -5,6 +5,11 @@ import { getPriceColor, getPriceLabel } from '../../utils/colors'
 export function StationPopup({ station }) {
   const color = getPriceColor(station.price_regular, station.price_regular, station.price_regular)
   const label = getPriceLabel(station.price_regular, station.price_regular, station.price_regular)
+  const confidenceLabel = station.location_confidence === 'geocoded'
+    ? 'Address-matched location'
+    : station.location_confidence === 'exact'
+      ? 'Exact location'
+      : 'Location confidence unavailable'
   
   // Generate Google Maps directions URL
   const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
@@ -44,6 +49,11 @@ export function StationPopup({ station }) {
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 flex-shrink-0 text-slate-400" />
           <span>Updated {formatRelativeTime(station.time || station.local_time)}</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <MapPin className="w-4 h-4 flex-shrink-0 text-slate-400" />
+          <span>{confidenceLabel}</span>
         </div>
       </div>
       

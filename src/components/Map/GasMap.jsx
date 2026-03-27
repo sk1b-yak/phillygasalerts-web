@@ -20,7 +20,7 @@ function MapController() {
   const { selectedStation } = useStore()
   
   useEffect(() => {
-    if (selectedStation && selectedStation.lat && selectedStation.lng) {
+    if (selectedStation?.has_reliable_location && selectedStation.lat && selectedStation.lng) {
       map.flyTo([selectedStation.lat, selectedStation.lng], 15, {
         duration: 0.5
       })
@@ -43,6 +43,10 @@ export function GasMap() {
   const { reload } = useGasPrices()
   
   const filteredStations = getFilteredStations()
+  const mappableStations = filteredStations.filter(
+    (station) => station.has_reliable_location && station.lat != null && station.lng != null
+  )
+  const unmappedStations = filteredStations.length - mappableStations.length
   const { min, max } = getPriceRange()
   
   // Create heatmap layer reference
@@ -90,9 +94,14 @@ export function GasMap() {
           
           <PriceLegend min={min} max={max} />
           
-          {/* Station count */}
-          <div className="text-sm text-slate-500 dark:text-slate-400 text-center">
-            Showing {filteredStations.length} stations
+          <div className="space-y-1 text-sm text-slate-500 dark:text-slate-400 text-center">
+            <div>Showing {filteredStations.length} stations</div>
+            <div>{mappableStations.length} mapped with trusted coordinates</div>
+            {unmappedStations > 0 && (
+              <div className="text-amber-600 dark:text-amber-400">
+                {unmappedStations} hidden until location is verified
+              </div>
+            )}
           </div>
         </div>
       </aside>
@@ -152,7 +161,7 @@ export function GasMap() {
             
             <MapController />
             
-            {filteredStations.map((station) => (
+            {mappableStations.map((station) => (
               <StationMarker
                 key={`${station.station_name}-${station.address}`}
                 station={station}
