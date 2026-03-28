@@ -1,0 +1,149 @@
+[2026-03-26 07:02:35] [INFO    ] discord.client: logging in using static token
+[2026-03-26 07:02:36] [INFO    ] discord.gateway: Shard ID None has connected to Gateway (Session ID: 2ff3f5b8cf7a850d5b36da987d05152e).
+[2026-03-26 07:08:16] [WARNING ] discord.gateway: Shard ID None heartbeat blocked for more than 10 seconds.
+Loop thread traceback (most recent call last):
+  File "/opt/phillygasalerts/bot/main.py", line 329, in <module>
+    bot.run(TOKEN)
+  File "/usr/local/lib/python3.12/dist-packages/discord/client.py", line 933, in run
+    asyncio.run(runner())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 674, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
+    self._run_once()
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 1987, in _run_once
+    handle._run()
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/local/lib/python3.12/dist-packages/discord/client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "/opt/phillygasalerts/bot/main.py", line 38, in on_message
+    await bot.process_commands(message)
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/bot.py", line 1418, in process_commands
+    await self.invoke(ctx)  # type: ignore
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/bot.py", line 1376, in invoke
+    await ctx.command.invoke(ctx)
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/core.py", line 1064, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/core.py", line 266, in wrapped
+    ret = await coro(*args, **kwargs)
+  File "/opt/phillygasalerts/bot/main.py", line 207, in map_command
+    map_file = save_map()
+  File "/opt/phillygasalerts/bot/map_generator.py", line 248, in save_map
+    m = generate_gas_map()
+  File "/opt/phillygasalerts/bot/map_generator.py", line 134, in generate_gas_map
+    lat_lng = geocode_address(station['address'])
+  File "/opt/phillygasalerts/bot/map_generator.py", line 51, in geocode_address
+    location = geolocator.geocode(f"{address}, Philadelphia, PA", timeout=10)
+  File "/usr/local/lib/python3.12/dist-packages/geopy/geocoders/nominatim.py", line 297, in geocode
+    return self._call_geocoder(url, callback, timeout=timeout)
+  File "/usr/local/lib/python3.12/dist-packages/geopy/geocoders/base.py", line 368, in _call_geocoder
+    result = self.adapter.get_json(url, timeout=timeout, headers=req_headers)
+  File "/usr/local/lib/python3.12/dist-packages/geopy/adapters.py", line 472, in get_json
+    resp = self._request(url, timeout=timeout, headers=headers)
+  File "/usr/local/lib/python3.12/dist-packages/geopy/adapters.py", line 482, in _request
+    resp = self.session.get(url, timeout=timeout, headers=headers)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 602, in get
+    return self.request("GET", url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 791, in urlopen
+    response = self._make_request(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 537, in _make_request
+    response = conn.getresponse()
+  File "/usr/lib/python3/dist-packages/urllib3/connection.py", line 461, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.12/http/client.py", line 1448, in getresponse
+    response.begin()
+  File "/usr/lib/python3.12/http/client.py", line 336, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.12/http/client.py", line 297, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/lib/python3.12/socket.py", line 707, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/lib/python3.12/ssl.py", line 1252, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/lib/python3.12/ssl.py", line 1104, in read
+    return self._sslobj.read(len, buffer)
+
+[2026-03-26 07:08:26] [WARNING ] discord.gateway: Shard ID None heartbeat blocked for more than 20 seconds.
+Loop thread traceback (most recent call last):
+  File "/opt/phillygasalerts/bot/main.py", line 329, in <module>
+    bot.run(TOKEN)
+  File "/usr/local/lib/python3.12/dist-packages/discord/client.py", line 933, in run
+    asyncio.run(runner())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 674, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
+    self._run_once()
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 1987, in _run_once
+    handle._run()
+  File "/usr/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/local/lib/python3.12/dist-packages/discord/client.py", line 508, in _run_event
+    await coro(*args, **kwargs)
+  File "/opt/phillygasalerts/bot/main.py", line 38, in on_message
+    await bot.process_commands(message)
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/bot.py", line 1418, in process_commands
+    await self.invoke(ctx)  # type: ignore
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/bot.py", line 1376, in invoke
+    await ctx.command.invoke(ctx)
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/core.py", line 1064, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+  File "/usr/local/lib/python3.12/dist-packages/discord/ext/commands/core.py", line 266, in wrapped
+    ret = await coro(*args, **kwargs)
+  File "/opt/phillygasalerts/bot/main.py", line 207, in map_command
+    map_file = save_map()
+  File "/opt/phillygasalerts/bot/map_generator.py", line 248, in save_map
+    m = generate_gas_map()
+  File "/opt/phillygasalerts/bot/map_generator.py", line 134, in generate_gas_map
+    lat_lng = geocode_address(station['address'])
+  File "/opt/phillygasalerts/bot/map_generator.py", line 56, in geocode_address
+    time.sleep(1.1)
+
+[2026-03-26 07:08:29] [ERROR   ] discord.client: Attempting a reconnect in 0.79s
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/discord/client.py", line 731, in connect
+    await self.ws.poll_event()
+  File "/usr/local/lib/python3.12/dist-packages/discord/gateway.py", line 644, in poll_event
+    await self.received_message(msg.data)
+  File "/usr/local/lib/python3.12/dist-packages/discord/gateway.py", line 549, in received_message
+    await self.send_as_json(beat)
+  File "/usr/local/lib/python3.12/dist-packages/discord/gateway.py", line 681, in send_as_json
+    await self.send(utils._to_json(data))
+  File "/usr/local/lib/python3.12/dist-packages/discord/gateway.py", line 677, in send
+    await self.socket.send_str(data)
+  File "/usr/local/lib/python3.12/dist-packages/aiohttp/client_ws.py", line 245, in send_str
+    await self._writer.send_frame(
+  File "/usr/local/lib/python3.12/dist-packages/aiohttp/_websocket/writer.py", line 83, in send_frame
+    self._write_websocket_frame(message, opcode, 0)
+  File "/usr/local/lib/python3.12/dist-packages/aiohttp/_websocket/writer.py", line 151, in _write_websocket_frame
+    raise ClientConnectionResetError("Cannot write to closing transport")
+aiohttp.client_exceptions.ClientConnectionResetError: Cannot write to closing transport
+[2026-03-26 07:08:31] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 07:26:02] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 09:06:05] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 12:29:37] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 12:56:21] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 16:44:38] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 20:39:07] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 22:25:20] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 23:10:12] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-26 23:52:43] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-27 02:31:21] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-27 04:21:59] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-27 08:03:18] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-27 10:22:11] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-27 12:58:34] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.
+[2026-03-27 13:26:18] [INFO    ] discord.gateway: Shard ID None has successfully RESUMED session 2ff3f5b8cf7a850d5b36da987d05152e.

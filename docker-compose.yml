@@ -1,0 +1,117 @@
+# NOTE: Docker bridge network has DNS issues on this server.
+# Build images manually with: docker build --network=host -t philly_api ./app
+# Then run with: docker run --network=host ... (see below for full commands)
+
+services:
+  philly_api:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: philly_api
+    network_mode: host
+    environment:
+      - DB_HOST=127.0.0.1
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-phillygasalerts}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CORS_ORIGINS=https://*.pages.dev,https://phillygasalerts.com
+      - RATE_LIMIT_REQUESTS=100
+      - RATE_LIMIT_WINDOW_SECONDS=60
+    depends_on:
+      philly_db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  philly_bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: philly_bot
+    network_mode: host
+    environment:
+      - DB_HOST=127.0.0.1
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-phillygasalerts}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - DISCORD_CHANNEL_ID=${DISCORD_CHANNEL_ID}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - ZYLA_API_KEY=${ZYLA_API_KEY}
+      - ZIP_CODES=${ZIP_CODES}
+    depends_on:
+      philly_db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  philly_tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: philly_tunnel
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      - philly_api
+
+  philly_db:
+    image: timescale/timescaledb:2.17.0-pg15
+    container_name: philly_db
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME:-phillygasalerts}
+    volumes:
+      - philly_timescaledb_data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-phillygasalerts}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - philly_network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  philly_redis:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:v1.23.2
+    container_name: philly_redis
+    restart: unless-stopped
+    ulimits:
+      memlock: -1
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - philly_dragonfly_data:/data
+    healthcheck:
+      test: ["CMD", "dragonfly-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - philly_network
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+networks:
+  philly_network:
+    driver: bridge
+
+volumes:
+  philly_timescaledb_data:
+  philly_dragonfly_data:
