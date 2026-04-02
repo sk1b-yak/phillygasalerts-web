@@ -1,70 +1,100 @@
-import { Flame, TrendingDown, TrendingUp, Clock } from 'lucide-react'
+import { Flame, TrendingDown, TrendingUp, MapPin } from 'lucide-react'
 import { useStore } from '../../stores/useStore'
 import { formatPrice } from '../../utils/formatters'
 
-export function StatsCard() {
-  const { stats, getPriceRange, isLoading } = useStore()
-  const { min, max, avg } = getPriceRange()
-  
+// Condensed single-line stats for mobile peek bar
+export function StatsBarCondensed() {
+  const { getPriceRange, getFilteredStations, isLoading } = useStore()
+  const { min, max } = getPriceRange()
+  const count = getFilteredStations().length
+
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="card p-4">
-            <div className="skeleton h-4 w-20 mb-2" />
-            <div className="skeleton h-8 w-16" />
+      <div className="flex items-center gap-3 text-sm text-slate-400">
+        <div className="skeleton h-4 w-20 rounded" />
+        <div className="skeleton h-4 w-12 rounded" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center gap-3 text-sm font-medium">
+      <span className="text-philly-blue font-bold">{formatPrice(min)}</span>
+      <span className="text-slate-400">-</span>
+      <span className="text-philly-crimson font-bold">{formatPrice(max)}</span>
+      <span className="text-slate-400 mx-1">&middot;</span>
+      <span className="text-slate-500 dark:text-slate-400 flex items-center gap-1">
+        <MapPin className="w-3 h-3" />
+        {count} stations
+      </span>
+    </div>
+  )
+}
+
+// Horizontal pill-style stats for desktop side panel
+export function StatsCard() {
+  const { stats, getPriceRange, getFilteredStations, isLoading } = useStore()
+  const { min, max, avg } = getPriceRange()
+  const count = getFilteredStations().length
+
+  if (isLoading) {
+    return (
+      <div className="flex gap-2">
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className="flex-1 rounded-lg bg-slate-100 dark:bg-slate-700/50 p-2.5">
+            <div className="skeleton h-3 w-12 mb-1.5 rounded" />
+            <div className="skeleton h-5 w-10 rounded" />
           </div>
         ))}
       </div>
     )
   }
-  
-  const statItems = [
+
+  const items = [
     {
-      label: 'Cheapest',
+      label: 'Low',
       value: formatPrice(min),
       icon: TrendingDown,
       color: 'text-philly-blue',
-      bgColor: 'bg-blue-50 dark:bg-blue-900/30',
+      bg: 'bg-blue-50 dark:bg-blue-900/20',
     },
     {
-      label: 'Average',
+      label: 'Avg',
       value: formatPrice(avg),
       icon: Flame,
       color: 'text-philly-gold',
-      bgColor: 'bg-yellow-50 dark:bg-yellow-900/30',
+      bg: 'bg-yellow-50 dark:bg-yellow-900/20',
     },
     {
-      label: 'Most Expensive',
+      label: 'High',
       value: formatPrice(max),
       icon: TrendingUp,
       color: 'text-philly-crimson',
-      bgColor: 'bg-red-50 dark:bg-red-900/30',
-    },
-    {
-      label: 'Last Updated',
-      value: stats?.last_updated || 'Recently',
-      icon: Clock,
-      color: 'text-slate-600 dark:text-slate-400',
-      bgColor: 'bg-slate-50 dark:bg-slate-700',
+      bg: 'bg-red-50 dark:bg-red-900/20',
     },
   ]
-  
+
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {statItems.map((item) => (
-        <div key={item.label} className={`card p-4 ${item.bgColor}`}>
-          <div className="flex items-center gap-2 mb-1">
-            <item.icon className={`w-4 h-4 ${item.color}`} />
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-              {item.label}
-            </span>
+    <div className="space-y-2">
+      <div className="flex gap-2">
+        {items.map((item) => (
+          <div key={item.label} className={`flex-1 rounded-lg ${item.bg} px-3 py-2`}>
+            <div className="flex items-center gap-1 mb-0.5">
+              <item.icon className={`w-3 h-3 ${item.color}`} />
+              <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                {item.label}
+              </span>
+            </div>
+            <p className={`text-lg font-bold ${item.color} leading-tight`}>
+              {item.value}
+            </p>
           </div>
-          <p className={`text-xl font-bold ${item.color}`}>
-            {item.value}
-          </p>
-        </div>
-      ))}
+        ))}
+      </div>
+      <div className="flex items-center justify-between text-xs text-slate-400">
+        <span>{count} stations</span>
+        <span>{stats?.last_updated || 'Updated recently'}</span>
+      </div>
     </div>
   )
 }

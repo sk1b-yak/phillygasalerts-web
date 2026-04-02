@@ -55,6 +55,13 @@ export function StationPopup({ station }) {
           <MapPin className="w-4 h-4 flex-shrink-0 text-slate-400" />
           <span>{confidenceLabel}</span>
         </div>
+
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 flex-shrink-0 text-slate-400" />
+          <span className="capitalize">
+            Source: {station.source || 'unknown'} · {station.validation_status || 'valid'}
+          </span>
+        </div>
       </div>
       
       {/* Actions */}

@@ -4,16 +4,66 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Real-time Philadelphia gas prices with interactive map" />
+    <meta name="description" content="Real-time gas prices for Philadelphia, Delaware County & South Jersey. Interactive heatmap, 200+ stations, updated daily before rush hour." />
+    <meta name="keywords" content="gas prices, Philadelphia, Philly, Delaware County, South Jersey, cheap gas, fuel prices, gas station map" />
+    <meta name="author" content="PhillyGasAlerts" />
     <meta name="theme-color" content="#006BB6" />
-    <title>PhillyGasAlerts - Philadelphia Gas Prices</title>
+    <meta property="og:title" content="PhillyGasAlerts - Philly Region Gas Prices" />
+    <meta property="og:description" content="Find the cheapest gas near you. Real-time prices for 200+ stations across Philly, Delco & South Jersey." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://phillygasalerts.com" />
+    <title>PREVIEW: PhillyGasAlerts - Philly Region Gas Prices</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <meta name="google-adsense-account" content="ca-pub-5969510122602447">
+    <!-- Google AdSense — replace ca-pub-XXXXXXXX with your publisher ID once approved -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5969510122602447" crossorigin="anonymous"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Skeleton UI — replaced by React on hydration -->
+      <style>
+        .sk{position:absolute;inset:0;background:#0a0e1a;font-family:system-ui,sans-serif;overflow:hidden}
+        .sk-hdr{height:56px;background:rgba(0,0,0,.6);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 20px;gap:10px}
+        .sk-logo{width:32px;height:32px;border-radius:12px;background:rgba(0,107,182,.15);border:1px solid rgba(0,107,182,.25)}
+        .sk-txt{height:14px;border-radius:4px;background:rgba(255,255,255,.06)}
+        .sk-side{position:absolute;top:56px;bottom:0;left:0;width:300px;background:rgba(0,0,0,.5);border-right:1px solid rgba(255,255,255,.07);padding:16px}
+        .sk-card{height:72px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.04);margin-bottom:8px}
+        .sk-map{position:absolute;top:56px;left:300px;right:0;bottom:0;background:#0a0e1a}
+        .sk-pulse{animation:sk-p 1.5s ease-in-out infinite}
+        @keyframes sk-p{0%,100%{opacity:.4}50%{opacity:1}}
+        @media(max-width:768px){.sk-side{display:none}.sk-map{left:0}}
+        @keyframes sk-spin{to{transform:rotate(360deg)}}
+      </style>
+      <div class="sk">
+        <div class="sk-hdr">
+          <div class="sk-logo sk-pulse"></div>
+          <div class="sk-txt sk-pulse" style="width:100px"></div>
+          <div style="flex:1"></div>
+          <div class="sk-txt sk-pulse" style="width:60px;height:28px;border-radius:12px"></div>
+        </div>
+        <div class="sk-side">
+          <div class="sk-txt sk-pulse" style="width:80px;height:10px;margin-bottom:16px"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+            <div class="sk-card" style="height:60px"></div>
+            <div class="sk-card" style="height:60px"></div>
+          </div>
+          <div class="sk-card sk-pulse"></div>
+          <div class="sk-card sk-pulse"></div>
+          <div class="sk-card sk-pulse"></div>
+          <div class="sk-card sk-pulse"></div>
+          <div class="sk-card sk-pulse"></div>
+        </div>
+        <div class="sk-map">
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+            <div style="width:40px;height:40px;border:2px solid rgba(0,107,182,.3);border-top-color:#006BB6;border-radius:50%;animation:sk-spin 1s linear infinite;margin:0 auto 12px"></div>
+            <div style="color:rgba(255,255,255,.2);font-size:10px;letter-spacing:0.2em;text-transform:uppercase">Loading Map</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

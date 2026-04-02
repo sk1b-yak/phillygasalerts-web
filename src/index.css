@@ -58,29 +58,6 @@
   }
 }
 
-/* MapLibre overrides */
-.maplibregl-map {
-  @apply font-sans;
-}
-
-.maplibregl-popup-content {
-  @apply rounded-xl shadow-xl p-0 m-0;
-}
-
-.maplibregl-popup-close-button {
-  @apply text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 p-2 text-lg;
-}
-
-/* Price marker styles */
-.price-marker {
-  @apply flex items-center justify-center rounded-full border-2 border-white
-         font-bold text-white shadow-lg transition-transform duration-200;
-}
-
-.price-marker:hover {
-  @apply scale-110;
-}
-
 /* Animation classes */
 .fade-in {
   animation: fadeIn 0.3s ease-out;
@@ -89,6 +66,24 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flashRose {
+  0%, 100% { color: rgba(244, 63, 94, 0.9); }
+  50% { color: rgba(244, 63, 94, 0.4); }
+}
+
+@keyframes flashEmerald {
+  0%, 100% { color: rgba(16, 185, 129, 0.9); }
+  50% { color: rgba(16, 185, 129, 0.4); }
+}
+
+.animate-flash-rose {
+  animation: flashRose 0.5s ease-in-out;
+}
+
+.animate-flash-emerald {
+  animation: flashEmerald 0.5s ease-in-out;
 }
 
 /* Skeleton loading */

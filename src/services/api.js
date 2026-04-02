@@ -14,7 +14,6 @@ const api = axios.create({
 // Request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    console.log(`[API] ${config.method?.toUpperCase()} ${config.url}`)
     return config
   },
   (error) => {
@@ -84,6 +83,31 @@ export const fetchHealth = async () => {
     return response.data
   } catch (error) {
     console.error('Failed to fetch health:', error)
+    throw error
+  }
+}
+
+/**
+ * Fetch price history records with optional filters.
+ * @param {Object} [params] - Query parameters
+ * @param {string} [params.zip_code] - Optional ZIP code filter
+ * @param {string} [params.station_name] - Optional station name filter
+ * @param {number} [params.limit] - Maximum records to return (default 10000)
+ * @returns {Promise<Object>} History response data
+ */
+export const fetchHistory = async (params = {}) => {
+  try {
+    const queryParams = new URLSearchParams()
+    if (params.zip_code) queryParams.append('zip_code', params.zip_code)
+    if (params.station_name) queryParams.append('station_name', params.station_name)
+    if (params.limit) queryParams.append('limit', String(params.limit))
+
+    const queryString = queryParams.toString()
+    const url = queryString ? `/history?${queryString}` : '/history'
+    const response = await api.get(url)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch history:', error)
     throw error
   }
 }

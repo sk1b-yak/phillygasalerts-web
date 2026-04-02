@@ -1,16 +1,15 @@
-import { Header } from './components/UI/Header'
-import { Footer } from './components/UI/Footer'
-import { GasMap } from './components/Map/GasMap'
+import { Routes, Route } from 'react-router-dom'
+import { PythViewLayout } from './components/Layout/PythViewLayout'
+import { PrivacyPolicy } from './pages/PrivacyPolicy'
+import { TermsOfService } from './pages/TermsOfService'
 
 function App() {
   return (
-    <div className="flex flex-col h-screen bg-slate-100 dark:bg-slate-900">
-      <Header />
-      <main className="flex-1 overflow-hidden">
-        <GasMap />
-      </main>
-      <Footer />
-    </div>
+    <Routes>
+      <Route path="/" element={<PythViewLayout />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
+    </Routes>
   )
 }
 
